@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:music/Screens/AnalysisScreen.dart';
 import 'package:music/Screens/DashboardScreen.dart';
-import 'package:music/Screens/SubmitSongScreen.dart';
+import 'package:music/Screens/submitSong.dart';
+import 'package:music/Screens/profile.dart'; // <-- Add this import
 
 class HomePage extends StatefulWidget {
   final String? artist_name;
@@ -29,9 +30,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   final List<Widget> _pages = [
-    DashboardScreen(), // Replace with your Dashboard screen
-    SubmitSongScreen(), // Replace with your Submit Song screen
-    AnalysisPage(), // Replace with your Analysis screen
+    DashboardScreen(),
+    SubmitSongScreen(),
+    AnalysisScreen(),
   ];
 
   @override
@@ -61,7 +62,10 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(right: 16.0),
             child: GestureDetector(
               onTap: () {
-                // TODO: Navigate to profile page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                );
               },
               child: CircleAvatar(
                 backgroundColor: Colors.blue,
