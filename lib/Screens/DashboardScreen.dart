@@ -68,8 +68,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         .length;
     failedSongs = safeSongList
         .where((s) =>
-            (s['status'] ?? '').toString().toLowerCase() == 'failed' ||
-            (s['status'] ?? '').toString().toLowerCase() == 'disapproved')
+            (s['status'] ?? '').toString().toLowerCase() == 'rejected') 
         .length;
     pendingSongs = safeSongList
         .where((s) => (s['status'] ?? '').toString().toLowerCase() == 'pending')
@@ -89,8 +88,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return Colors.green;
       case "pending":
         return Colors.orange;
-      case "failed":
-      case "disapproved":
+      case "rejected": 
         return Colors.red;
       default:
         return Colors.grey;
@@ -142,23 +140,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               fontSize: 17,
                               color: Colors.black87),
                         ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            // TODO: Navigate to Upload Song Screen
-                          },
-                          icon: const Icon(Icons.add, size: 18),
-                          label: const Text("Upload New Song"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF2563EB),
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 14),
-                            textStyle:
-                                const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
+                      
                       ],
                     ),
                     const SizedBox(height: 10),
@@ -231,12 +213,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.deepPurple.withOpacity(0.10),
+              color: statusColor(status).withOpacity(0.10),
               borderRadius: BorderRadius.circular(8),
             ),
             padding: const EdgeInsets.all(10),
-            child:
-                const Icon(Icons.music_note, color: Colors.deepPurple, size: 28),
+            child: Icon(Icons.music_note, color: statusColor(status), size: 28),
           ),
           const SizedBox(width: 14),
           Expanded(
