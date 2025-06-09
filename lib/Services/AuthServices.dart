@@ -12,34 +12,32 @@ class AuthService {
     required String artistName,
     required String phone,
   }) async {
-    // 1. Register with Supabase Auth
-    final response = await _supabase.auth.signUp(
-      email: email.trim(),
-      password: password.trim(),
-    );
+    final supabase = Supabase.instance.client;
+    try {
+      // 1. Register with Supabase Auth
+      final response = await supabase.auth.signUp(
+        email: email,
+        password: password,
+      );
+      final user = response.user;
+      if (user == null) {
+        return 'Registration failed: No user returned';
+      }
 
-    final user = response.user;
-    if (user == null) {
-      return 'Registration failed';
+      // 2. Insert into users table
+      await supabase.from('users').insert({
+        'user_id': user.id,
+        'first_name': firstName,
+        'last_name': lastName,
+        'artist_name': artistName,
+        'email': email,
+        'phone': phone,
+      });
+
+      return null; // Success
+    } catch (e) {
+      return 'Registration failed: $e';
     }
-
-    // 2. Insert extra info into 'users' table
-    final insertResponse = await _supabase.from('users').insert({
-      'user_id': user.id,
-      'email': email.trim(),
-      'first_name': firstName.trim(),
-      'last_name': lastName.trim(),
-      'artist_name': artistName.trim(),
-      'phone': phone.trim(),
-    });
-
-    // Check for insert error (for latest supabase_flutter)
-    if (insertResponse == null ||
-        (insertResponse.status != 201 && insertResponse.status != 200)) {
-      return 'Failed to insert user data: ${insertResponse?.toString() ?? "No response"}';
-    }
-
-    return null; // Success
   }
 
   // Login user

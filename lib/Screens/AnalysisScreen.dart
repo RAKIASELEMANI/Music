@@ -42,7 +42,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
     int total = data.length;
     int approved = data.where((row) => row['status'] == 'approved').length;
     int pending = data.where((row) => row['status'] == 'pending').length;
-    int disapproved = data.where((row) => row['status'] == 'disapproved').length;
+    int disapproved = data.where((row) => row['status'] == 'rejected').length; // <-- changed here
 
     // Fetch all quality values for this user only
     final qualityResponse = await supabase
@@ -266,7 +266,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => SongListScreen(status: 'disapproved'),
+                          builder: (_) => SongListScreen(status: 'rejected'), // <-- changed here
                         ),
                       );
                     },
